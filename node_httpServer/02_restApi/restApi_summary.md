@@ -20,3 +20,7 @@ REST API 는 서버의 자원을 정의하고, 자원에 대한 주소를 지정
         DELETE          |       /users/사용자id  | 해당 id의 사용자 제거
         ...등등
 
+진행 순서
+1. restServer.js 서버 구동
+2. localhost:8085로 접근 시 ('/'로 접근) restFront.html 파일을 전송
+3. restFront.html 파일 로딩되면 페이지에 include해둔 restFront.js 파일의 getUser() 함수가 호출되어 사용자 목록을 조회
