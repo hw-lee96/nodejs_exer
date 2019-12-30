@@ -12,6 +12,13 @@ http.createServer( (req, res) => {
                 }
                 res.end(data);
             });
+        } else if ( req.url === '/about' ) {
+            return fs.readFile('./about.html', (err, data) => {
+                if ( err ) {
+                    throw err;
+                }
+                res.end(data);
+            });
         } else if ( req.url === '/users' ) {
             return res.end(JSON.stringify(users));
         }
@@ -25,13 +32,17 @@ http.createServer( (req, res) => {
     } else if ( req.method === 'POST' ) {
         if ( req.url === '/users') {
             let body = '';
+            //on('click') 처럼 data에 대응하는 이벤트 작성
             req.on('data', (data) => {
                 body += data;
             });
+            //end에 대응하는 이벤트 작성
             return req.on('end', () => {
                 console.log('POST 본문(Body) : ', body);
                 const {name} = JSON.parse(body);
+                //날짜를 숫자로 반환
                 const id = +new Date();
+                //id(key) : name(value)로 저장
                 users[id] = name;
                 res.writeHead(201);
                 res.end('등록 성공');

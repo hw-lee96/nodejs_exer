@@ -15,6 +15,7 @@ function getUser() {      //로딩 시 가져오는 함수
                     4. 클라이언트 오류 : 400-499
                     5. 서버 오류 : 500-599
                 */
+        console.log("xhr.status : " + xhr.status) ;
         if ( xhr.status === 200 ) {     //200은 요청이 성공했다는 응답코드입니다.
             //responseText는 서버에서 응답 받은 텍스트를 반환합니다.
             var users = JSON.parse(xhr.responseText);
@@ -50,42 +51,43 @@ function getUser() {      //로딩 시 가져오는 함수
                     //변경할 이름을 입력 시 ajax로 아래 동작 실행
                     var xhr = new XMLHttpRequest();
                     xhr.onlond = function () {
-
                         if ( xhr.status === 200 ) {
-                            console.log("response 1 ");
                             console.log(xhr.responseText);
                             getUser();
                         } else {
                             console.error(xhr.responseText);
                         }
                     };
-                    var remove = document.createElement('button');
-                    remove.textContent = '삭제';
-                    remove.addEventListener('click', function () {      //삭제버튼 클릭
-                        var xhr = new XMLHttpRequest();
-                        xhr.onload = function () {
-                            if ( xhr.status === 200 ) {
-                                console.log(xhr.responseText);
-                                getUser();
-                            } else {
-                                console.error(xhr.responseText);
-                            }
-                        };
-                        xhr.open('DELETE', '/user/' + key);
-                        xhr.send();
-                    });
-                    userDiv.appendChild(span);
-                    userDiv.appendChild(edit);
-                    userDiv.appendChild(remove);
-                    list.appendChild(userDiv);
+                    xhr.open('PUT', '/users/' + key);
+                    xhr.setRequestHeader('Content-Type','application/json');
+                    xhr.send(JSON.stringify({name:name}));
                 });
+                var remove = document.createElement('button');
+                remove.textContent = '삭제';
+                remove.addEventListener('click', function () {      //삭제버튼 클릭
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        if ( xhr.status === 200 ) {
+                            console.log(xhr.responseText);
+                            getUser();
+                        } else {
+                            console.error(xhr.responseText);
+                        }
+                    };
+                    xhr.open('DELETE', '/users/' + key);
+                    xhr.send();
+                });
+                userDiv.appendChild(span);
+                userDiv.appendChild(edit);
+                userDiv.appendChild(remove);
+                list.appendChild(userDiv);
             });
         } else {
             console.error(xhr.responseText);
         }
     };
     xhr.open('GET','/users');
-    xhr.send();
+    xhr.send("");
 }
 
 window.onload = getUser;      //로딩 시 getUser 호출
@@ -99,7 +101,9 @@ document.getElementById('form').addEventListener('submit', function (e) {
         return alert('이름을 입력하세요.');
     }
     var xhr = new XMLHttpRequest();
+    //서버에 POST로
     xhr.onload = function() {
+        
         if ( xhr.status === 201 ) {
             console.log("xhr.responseText : " + xhr.responseText);
             getUser();
