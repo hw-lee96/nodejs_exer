@@ -6,14 +6,14 @@ const users = {};
 http.createServer( (req, res) => {
     if ( req.method === 'GET' ) {
         if ( req.url === '/' ) {
-            return fs.readFile('./restFront.html', (err, data) => {
+            return fs.readFile('./views/restFront.html', (err, data) => {
                 if ( err ) {
                     throw err;   
                 }
                 res.end(data);
             });
         } else if ( req.url === '/about' ) {
-            return fs.readFile('./about.html', (err, data) => {
+            return fs.readFile('./views/about.html', (err, data) => {
                 if ( err ) {
                     throw err;
                 }
