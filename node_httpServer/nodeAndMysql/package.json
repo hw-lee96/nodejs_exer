@@ -1,0 +1,15 @@
+{
+  "name": "nodeandmysql",
+  "version": "1.0.0",
+  "description": "node와 mysql 연동 테스트",
+  "main": "restServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node restServer.js"
+  },
+  "author": "hwlee",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.17.1"
+  }
+}
