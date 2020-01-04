@@ -3,8 +3,10 @@ function getUser() {      //로딩 시 가져오는 함수
     // Ajax로 실행되는 HTTP 통신도 XMLHttpRequest 규격을 이용하고 있습니다.
     var xhr = new XMLHttpRequest();
 
-    //서버로부터 응답을 받을 때 발생하는 이벤트를 설정
-    //그래서 GET - users를 요청한 뒤 응답받으면 바로 아래 내용을 실행함
+    /*
+        서버로부터 응답을 받을 때 발생하는 이벤트를 설정
+        그래서 GET - users를 요청한 뒤 응답받으면 바로 아래 내용을 실행함
+    */
     xhr.onload = function () {
                 // xhr.status는 응답에 대한 숫자 HTTP 상태 코드를 반환합니다.
                 // 요청이 완료되기 전의 status값은 0이며, 브라우저는 XMLHttpRequest 오류 발생 시 0을 반환합니다.
@@ -20,6 +22,7 @@ function getUser() {      //로딩 시 가져오는 함수
         if ( xhr.status === 200 ) {     //200은 요청이 성공했다는 응답코드입니다.
             //responseText는 서버에서 응답 받은 텍스트를 반환합니다.
             var users = JSON.parse(xhr.responseText);
+
             //restFront.html에서 id가 list인 요소의 element 객체를 반환합니다.
             var list = document.getElementById('list');
             list.innerHTML = '';
@@ -30,6 +33,8 @@ function getUser() {      //로딩 시 가져오는 함수
                 {1577371078321: "이형우", 1577371102532: "이형우2"} 
 
                 그렇게 생성된 key배열의 원소 key를 매개변수(파라미터)로 아래 동작을 진행한다.
+
+                map : 배열 내 모든 요소에 대해 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환
 
             */
             //유저 데이터가 없으면 진입하지 않음
