@@ -7,6 +7,9 @@
 # $ git config --global mergetool.keepBackup false
 *.orig
 
+#ignore 폴더는 올라가지 않게 추가
+ignore/
+
 # Created by git when using merge tools for conflicts
 *.BACKUP.*
 *.BASE.*
