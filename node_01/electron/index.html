@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tools</title>
+</head>
+
+<style>
+  @font-face{
+    font-family:'HackRegular';
+    src:url('Hack-Regular.ttf');
+  }
+  @font-face{
+    font-family:'NotoSansRegular';
+    src:url('NotoSans-Regular.ttf');
+  }
+  * {
+    font-family : HackRegular;
+  }
+  #issueContent {
+    width: 500px;
+    height: 350px;
+  }
+  #transBtn {
+    margin-top:10px;
+    display:block;
+  }
+  #progress {
+    margin-top:30px;
+  }
+
+
+</style>
+
+<body>
+  <h2>주간보고 양식 변환</h2>
+
+  <textarea id="issueContent" ></textarea></body>
+  <button id="transBtn" onclick='transIssue();'>변환하기</button>
+  <div id="progress"></div>
+  <div id="result"></div>
+
+
+</html>
+
+<script>
+  function transIssue() {
+    var data = document.getElementById('issueContent').value;
+    var progDiv = document.getElementById('progress');
+
+    if ( data == '' )  return alert('내용을 입력해주세요!');
+
+    var statDiv = document.createElement('div');
+    var statDiv2 = document.createElement('div');
+    var countDiv = document.createElement('div');
+    var resultDiv = document.createElement('div');
+
+    statDiv.id = 'progStat';
+    countDiv.id = 'progCount';
+    resultDiv.id = 'result';
+    
+    function replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
+    }
+
+    var data = replaceAll(replaceAll(replaceAll(data,'\n\n', '|'),'\n', ''),'\t', '|').split('조치');
+    var issueArr = new Array();
+    var maxCnt = data.length;
+    var nowCnt = 1;
+
+    statDiv2.innerHTML = '<br>진행 중...<br>';
+    progDiv.appendChild(statDiv2);
+
+    data.map(( d ) => {
+        var varr = d.split('|'), issue = new Object();
+
+        countDiv.innerHTML = (nowCnt + '/' + maxCnt) ;
+        progDiv.appendChild(countDiv);
+
+        if ( d != '' ) {
+          issue.key = varr[0];
+          issue.title = varr[1];
+          issue.date = varr[2];
+        }
+        issueArr.push(issue);
+        nowCnt++;
+    });
+
+    var text = "", prevDt ;
+
+    issueArr.map( issue => {
+        if ( prevDt != issue.date ) {
+            console.log("\n" + issue.date);
+            text += "\n" + issue.date + "\n";
+        }
+        console.log(issue.key + " " + issue.title);
+        text += issue.key + " " + issue.title + "\n";
+        prevDt = issue.date;
+    });
+
+    const fs = require('fs');
+    fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData.txt", '\ufeff' + text, {encoding: 'utf8'});
+
+    statDiv.innerHTML = '파일생성 완료!';
+    progDiv.appendChild(statDiv);
+
+    resultDiv.innerHTML = '<br>===============결과===============' + replaceAll(text, '\n', '<br>');
+    progDiv.appendChild(resultDiv);
+  }
+
+</script>
