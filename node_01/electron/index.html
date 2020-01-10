@@ -20,6 +20,7 @@
   #issueContent {
     width: 500px;
     height: 350px;
+    resize: none;
   }
   #transBtn {
     margin-top:10px;
@@ -44,6 +45,10 @@
 </html>
 
 <script>
+  function replaceAll(str, searchStr, replaceStr) {
+      return str.split(searchStr).join(replaceStr);
+  }
+
   function transIssue() {
     var data = document.getElementById('issueContent').value;
     var progDiv = document.getElementById('progress');
@@ -59,10 +64,6 @@
     countDiv.id = 'progCount';
     resultDiv.id = 'result';
     
-    function replaceAll(str, searchStr, replaceStr) {
-        return str.split(searchStr).join(replaceStr);
-    }
-
     var data = replaceAll(replaceAll(replaceAll(data,'\n\n', '|'),'\n', ''),'\t', '|').split('조치');
     var issueArr = new Array();
     var maxCnt = data.length;
@@ -88,18 +89,25 @@
 
     var text = "", prevDt ;
 
-    issueArr.map( issue => {
-        if ( prevDt != issue.date ) {
-            console.log("\n" + issue.date);
-            text += "\n" + issue.date + "\n";
-        }
-        console.log(issue.key + " " + issue.title);
-        text += issue.key + " " + issue.title + "\n";
-        prevDt = issue.date;
-    });
+    for ( var i = 0 ; i < issueArr.length ; i++ ) {
+      //issue관련 데이터가 있는 객체의 값 중 하나라도 빈 값이 있으면 continue
+      for ( var str in issueArr[i] ) if ( str == '' ) continue;
+      //issue title에 SDAPP가 포함되어있으면 subTask로 판단하여 제외
+      if ( issueArr[i].title.includes('SDAPP')) continue;
+      //이전 날짜(prevDt)가 현재 issue의 date와 동일하지 않을 때 date출력 (결국 날짜별로 한 번 출력하려는 의도)
+      if ( prevDt != issueArr[i].date ) {
+          console.log("\n" + issueArr[i].date);
+          text += "\n" + issueArr[i].date + "\n";
+      }
+      console.log(issueArr[i].key + " " + issueArr[i].title);
+      text += issueArr[i].key + " " + issueArr[i].title + "\n";
+      prevDt = issueArr[i].date;
+    }
+    //yyyy-mm-dd hh.mi.ss 형태로 날짜 데이터 생성
+    var date = new Date(new Date().setHours(new Date().getHours()+9)).toISOString().slice(0,19).replace(/T/g,' ').replace(/:/g,'.');
 
     const fs = require('fs');
-    fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData.txt", '\ufeff' + text, {encoding: 'utf8'});
+    fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData_" + date + ".txt", '\ufeff' + text, {encoding: 'utf8'});
 
     statDiv.innerHTML = '파일생성 완료!';
     progDiv.appendChild(statDiv);

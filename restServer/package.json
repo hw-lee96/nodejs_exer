@@ -1,0 +1,17 @@
+{
+  "name": "restserver",
+  "version": "1.0.0",
+  "description": "restful server exercise",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "nodemon app.js"
+  },
+  "author": "hwlee",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.17.1",
+    "nodemon": "^2.0.2",
+    "restify": "^8.5.1"
+  }
+}
