@@ -1,0 +1,16 @@
+{
+  "name": "restserver2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hwlee",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "mysql": "^2.17.1",
+    "shelljs": "^0.8.3"
+  }
+}
