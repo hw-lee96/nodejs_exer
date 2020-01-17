@@ -1,6 +1,5 @@
 @echo start batch : node server!
 
-start node C:\Users\hw.lee\git\node\restServer2\index\server.js
-start node C:\Users\hw.lee\git\node\restServer2\index\server.js
-
+for /f %%g in (C:\Users\hw.lee\git\node\restServer2\serverList.txt) DO start node C:\Users\hw.lee\git\node\restServer2\%%g\server.js
+@echo Start success!
 pause
