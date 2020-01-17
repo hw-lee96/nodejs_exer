@@ -11,7 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\restServer\\app.js"
+            "program": "${workspaceFolder}\\restServer\\app.js",
+            "args": ["8010"]
         }
     ]
 }

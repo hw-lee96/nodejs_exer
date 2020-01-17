@@ -56,6 +56,7 @@ server.put('/updateUser', (req, res) => {
     });
 });
 
-server.listen(8080, () => {
-    console.log('restServer : 8080 서버 대기 중');
+var port = (process.argv[2] == null ? 8080 : parseInt(process.argv[2]));
+server.listen(port, () => {
+    console.log(`restServer : ${port} 서버 대기 중`);
 })
