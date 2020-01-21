@@ -10,6 +10,10 @@
 #ignore 폴더는 올라가지 않게 추가
 ignore/
 
+#config
+config/
+
+
 # Created by git when using merge tools for conflicts
 *.BACKUP.*
 *.BASE.*
