@@ -6,17 +6,36 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package": "asar pack ElectronPJ-darwin-x64/ElectronPJ.app/Contents/Resources/app ElectronPJ-darwin-x64/ElectronPJ.app/Contents/Resources/app.asar",
-    "build": "electron-packager . ElectronPJ"
+    "package": "asar pack ElectronPJ-darwin-x64/ElectronPJ.app/Contents/Resources/app ElectronPJ-darwin-x64/ElectronPJ.app/Contents/Resources/app.asar"
+    ,"dist": "electron-builder build"
   },
   "author": "hwlee",
   "license": "ISC",
   "devDependencies": {
     "asar": "^2.0.3",
-    "electron-builder": "^21.2.0",
-    "electron-packager": "^14.1.1"
+    "electron-packager": "^14.1.1",
+    "electron": "^7.1.9",
+    "electron-builder": "^21.2.0"
   },
-  "dependencies": {
-    "electron": "^7.1.9"
+  "build": {
+    "asar": true,
+    "appId": "com.electron_exer1",
+    "productName": "electron_exer1",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true
+    }
   }
 }
