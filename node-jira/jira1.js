@@ -46,24 +46,19 @@ function findIssue(key) {
     });
 }
 
-function searchJira(jql) {
-    jira.searchJira(jql).then(issue => {
-        issue.issues.map((issue) => {
-            console.log("#####################################");
-            console.log(issue.key);
-            console.log(issue.fields.summary);
-            console.log(issue.fields.duedate);
+function searchJira(jql, obtional) {
+    jira.searchJira(jql, obtional).then( issue => {
+        if ( issue.maxResults < issue.total ) {
+            var obtional_ = new Object();
+            obtional_.maxResults = issue.total;
+            return searchJira(jql, obtional_);
+        }
+        issue.issues.map((issue_) => {
+            console.log(issue.maxResults + "#####################################");
+            console.log(issue_.key);
+            console.log(issue_.fields.summary);
+            console.log(issue_.fields.duedate);
         });
-        
-        // for ( var i in issue.issues ) {
-        //     console.log( issue.issues[i].key );
-        // }
-
-        // for ( var i = 0 ; i < issue.issues.length ; i++ ) {
-        //     console.log(issue.issues[i].key);
-        // }
-
-        // console.log( issue );
     }).catch(err => {
         console.log(err);
     });
