@@ -37,7 +37,7 @@
   <h2>주간보고 양식 변환</h2>
 
   <textarea id="issueContent" ></textarea></body>
-  <button id="transBtn" onclick='transIssue();'>변환하기</button>
+  <button id="transBtn" onclick='jiraIssueSelect();'>변환하기</button>
   <div id="progress"></div>
   <div id="result"></div>
 
@@ -45,75 +45,110 @@
 </html>
 
 <script>
-  function replaceAll(str, searchStr, replaceStr) {
-      return str.split(searchStr).join(replaceStr);
-  }
-
-  function transIssue() {
-    var data = document.getElementById('issueContent').value;
-    var progDiv = document.getElementById('progress');
-
-    if ( data == '' )  return alert('내용을 입력해주세요!');
-
-    var statDiv = document.createElement('div');
-    var statDiv2 = document.createElement('div');
-    var countDiv = document.createElement('div');
-    var resultDiv = document.createElement('div');
-
-    statDiv.id = 'progStat';
-    countDiv.id = 'progCount';
-    resultDiv.id = 'result';
-    
-    var data = replaceAll(replaceAll(replaceAll(data,'\n\n', '|'),'\n', ''),'\t', '|').split('조치');
-    var issueArr = new Array();
-    var maxCnt = data.length;
-    var nowCnt = 1;
-
-    statDiv2.innerHTML = '<br>진행 중...<br>';
-    progDiv.appendChild(statDiv2);
-
-    data.map(( d ) => {
-        var varr = d.split('|'), issue = new Object();
-
-        countDiv.innerHTML = (nowCnt + '/' + maxCnt) ;
-        progDiv.appendChild(countDiv);
-
-        if ( d != '' ) {
-          issue.key = varr[0];
-          issue.title = varr[1];
-          issue.date = varr[2];
-        }
-        issueArr.push(issue);
-        nowCnt++;
-    });
-
-    var text = "", prevDt ;
-
-    for ( var i = 0 ; i < issueArr.length ; i++ ) {
-      //issue관련 데이터가 있는 객체의 값 중 하나라도 빈 값이 있으면 continue
-      for ( var str in issueArr[i] ) if ( str == '' ) continue;
-      //issue title에 SDAPP가 포함되어있으면 subTask로 판단하여 제외
-      if ( issueArr[i].title.includes('SDAPP')) continue;
-      //이전 날짜(prevDt)가 현재 issue의 date와 동일하지 않을 때 date출력 (결국 날짜별로 한 번 출력하려는 의도)
-      if ( prevDt != issueArr[i].date ) {
-          console.log("\n" + issueArr[i].date);
-          text += "\n" + issueArr[i].date + "\n";
-      }
-      console.log(issueArr[i].key + " " + issueArr[i].title);
-      text += issueArr[i].key + " " + issueArr[i].title + "\n";
-      prevDt = issueArr[i].date;
+    function replaceAll(str, searchStr, replaceStr) {
+        return str.split(searchStr).join(replaceStr);
     }
-    //yyyy-mm-dd hh.mi.ss 형태로 날짜 데이터 생성
-    var date = new Date(new Date().setHours(new Date().getHours()+9)).toISOString().slice(0,19).replace(/T/g,' ').replace(/:/g,'.');
 
-    const fs = require('fs');
-    fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData_" + date + ".txt", '\ufeff' + text, {encoding: 'utf8'});
+    function transIssue(issueArr) {
+        var progDiv = document.getElementById('progress');
+        var statDiv = document.createElement('div');
+        var statDiv2 = document.createElement('div');
+        var countDiv = document.createElement('div');
+        var resultDiv = document.createElement('div');
 
-    statDiv.innerHTML = '파일생성 완료!';
-    progDiv.appendChild(statDiv);
+        statDiv.id = 'progStat';
+        countDiv.id = 'progCount';
+        resultDiv.id = 'result';
 
-    resultDiv.innerHTML = '<br>===============결과===============' + replaceAll(text, '\n', '<br>');
-    progDiv.appendChild(resultDiv);
-  }
+        console.log(issueArr);
 
+        var issueCnt = 1;
+
+        statDiv2.innerHTML = '<br>진행 중...<br>';
+        progDiv.appendChild(statDiv2);
+
+        var text = "", prevDt ;
+
+        for ( var i = 0 ; i < issueArr.length ; i++ ) {
+            countDiv.innerHTML = issueCnt ;
+            progDiv.appendChild(countDiv);
+
+            //issue관련 데이터가 있는 객체의 값 중 하나라도 빈 값이 있으면 continue
+            for ( var str in issueArr[i] ) if ( str == '' ) continue;
+
+            //제외단어
+            var exceptWords = ['SDAPP', '디자인', 'QA'];
+            var isExcept = false;
+
+            for ( var j in exceptWords ) {
+                if ( issueArr[i].title.includes(exceptWords[j]) )  isExcept = true;
+            }
+
+            if ( isExcept == true ) continue;
+
+            //이전 날짜(prevDt)가 현재 issue의 date와 동일하지 않을 때 date출력 (결국 날짜별로 한 번 출력하려는 의도)
+            if ( prevDt != issueArr[i].date ) {
+                console.log("\n" + issueArr[i].date);
+                text += "\n" + issueArr[i].date + "\n";
+            }
+            console.log(issueArr[i].key + " " + issueArr[i].title);
+            text += issueArr[i].key + " " + issueArr[i].title + "\n";
+            prevDt = issueArr[i].date;
+
+            issueCnt++;
+        }
+        
+        //yyyy-mm-dd hh.mi.ss 형태로 날짜 데이터 생성
+        var date = new Date(new Date().setHours(new Date().getHours()+9)).toISOString().slice(0,19).replace(/T/g,' ').replace(/:/g,'.');
+
+        const fs = require('fs');
+        fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData_" + date + ".txt", '\ufeff' + text, {encoding: 'utf8'});
+
+        statDiv.innerHTML = '파일생성 완료!';
+        progDiv.appendChild(statDiv);
+
+        resultDiv.innerHTML = '<br>===============결과===============' + replaceAll(text, '\n', '<br>');
+        progDiv.appendChild(resultDiv);
+    }
+
+    function jiraIssueSelect() {
+        const config = require('./config/jiraApi.js');
+        
+        var jira = config.getJiraApi;
+
+        var jql  = 'project = "[ServiceDesk] 해피앱" AND TYPE != 문제 AND duedate >= -8d AND duedate <= 9d AND assignee not in (sg.oh, ys.woo, jklee, jhbae) ORDER BY duedate DESC, type ASC';
+
+        searchJira(jira, jql);
+    }
+
+    function searchJira(jira, jql, obtional) {
+
+
+        var issueArr = new Array();
+
+        jira.searchJira(jql, obtional).then( issue => {
+            if ( issue.maxResults < issue.total ) {
+                var obtional_ = new Object();
+                obtional_.maxResults = issue.total;
+                return searchJira(jira, jql, obtional_);
+            }
+        
+            issue.issues.map( function (issue) {
+                var issue_ = new Object();
+
+                if ( issue != '' ) {
+                    issue_.key = issue.key;
+                    issue_.title = issue.fields.summary;
+                    issue_.date = issue.fields.duedate;
+                }
+
+                issueArr.push(issue_);
+            });
+
+            transIssue(issueArr);
+            
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 </script>
