@@ -28,7 +28,8 @@ var jira = config.getJiraApi;
 */
 var jql  = 'project = "[ServiceDesk] 해피앱" AND TYPE != 문제 AND duedate >= -11d AND duedate <= 11d AND assignee not in (sg.oh, ys.woo, jklee, jhbae) ORDER BY duedate DESC, type ASC';
 
-searchJira(jql);
+// searchJira(jql);
+findIssue('SDAPP-3545');
 
 /*
 .then(issue => {
@@ -40,7 +41,10 @@ searchJira(jql);
 
 function findIssue(key) {
     jira.findIssue(key).then(issue => {
-        console.log( issue );
+        console.log( issue.fields.worklog.worklogs[0].author.displayName.split('(')[0] );
+        console.log( issue.fields.worklog.worklogs[0].comment );
+        console.log( issue.fields.worklog.worklogs[0].timeSpentSeconds / 60 / 60 );
+        console.log( issue.fields.worklog.worklogs[0].started );
     }).catch(err => {
         console.log(err);
     });
@@ -53,12 +57,13 @@ function searchJira(jql, obtional) {
             obtional_.maxResults = issue.total;
             return searchJira(jql, obtional_);
         }
-        issue.issues.map((issue_) => {
-            console.log(issue.maxResults + "#####################################");
-            console.log(issue_.key);
-            console.log(issue_.fields.summary);
-            console.log(issue_.fields.duedate);
-        });
+        console.log(issue);
+        // issue.issues.map((issue_) => {
+        //     console.log(issue.maxResults + "#####################################");
+        //     console.log(issue_.key);
+        //     console.log(issue_.fields.summary);
+        //     console.log(issue_.fields.duedate);
+        // });
     }).catch(err => {
         console.log(err);
     });
