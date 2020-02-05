@@ -1,47 +1,39 @@
-const config = require('./config/jiraApi.js');
+const config = require('./config/jiraApi.js')
 
-var jira = config.getJiraApi;
+searchStatistics()
 
-searchStatistics();
+async function searchStatistics() {
 
-function searchStatistics() {
-    const year = [2019, 2020];
+    let today = new Date()
+    let lastYear = today.getFullYear() - 1
+    let curYear = today.getFullYear()
+    let curMonth = today.getMonth()
 
-    var arr =  new Array();
-    // let data = new Object();
-    // var strResult = new Array();
-    for ( var i = 0 ; i < year.length ; i++ ) {
+    for ( var i = 0 ; i < 2 ; i++ ) {
         for ( var j = 1 ; j < 13 ; j++ ) {
-            var lastDay = new Date(year[i],i,0).getDate();
-            var startDate = `${year[i]}/${j = j.toString().length == 1 ? '0'+j : j}/01`;
-            var endDate = `${year[i]}/${j = j.toString().length == 1 ? '0'+j : j}/${lastDay}`;
+            let jira = config.getJiraApi
+
+            let searchYear = lastYear + i
+
+            if(searchYear >= curYear && curMonth+1 <= j) {
+                break
+            }
+            var lastDay = new Date(searchYear,j,0).getDate()
+            var startDate = `${searchYear}/${j = j.toString().length == 1 ? '0'+j : j}/01`
+            var endDate = `${searchYear}/${j = j.toString().length == 1 ? '0'+j : j}/${lastDay}`
             
-            var jql  = `project = "[ServiceDesk] 해피앱" AND TYPE != 문제 AND duedate >= '${startDate}' and duedate <= '${endDate}'`;
+            var jql  = `project = "[ServiceDesk] 해피앱" and assignee not in (sg.oh, ys.woo, jklee, jhbae, dskim) AND TYPE != 문제 AND duedate >= '${startDate}' and duedate <= '${endDate}' and summary !~ '디자인*'`
+            var totalCnt = -1 
 
-            // var temp = {
-            //     number : i,
-            //     sql : jql,
-            //     result : searchJira(jql)
-            // };
-            // strResult.push(temp);
+            await jira.searchJira(jql).then( function(issue) {
+                totalCnt = issue.total
+            }).catch(err => {
+                console.log(err)
+            })
 
-            searchJira(jql, '', arr);
-
-            // var totalCnt = searchJira(jql);
-            // console.log(`${year}/${i} 토탈 이슈 수 : ${totalCnt}`);
+            console.log()
+            console.log(`JQL : ${jql}`)
+            console.log(`${searchYear}/${j}월 토탈 이슈 수 : ${totalCnt}`)
         }
     }
-    // console.log(strResult);
-}
-
-
-function searchJira(jql, obtional, arr) {
-
-    jira.searchJira(jql, obtional).then( function(issue) {
-        console.log(`JQL START ==> ${jql}`);
-        console.log(`issue.total : ${issue.total}`)
-        return issue.total;
-    }).catch(err => {
-        // console.log(err);
-    });
 }
