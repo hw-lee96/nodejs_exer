@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Jira Statistics</title>
+</head>
+
+<style>
+    body {
+        background-color: #f0eeef;
+    }
+
+    @font-face {
+        font-family: 'HackRegular';
+        src: url('Hack-Regular.ttf');
+    }
+
+    * {
+        font-family: HackRegular;
+        /* border: 0.2px solid #ddd; */
+    }
+
+    .pageTitle {
+        width: 35%;
+        margin: 0px auto 0px auto;
+    }
+
+    .pageTitle p {
+        text-align: center;
+        font-size: 1.6em;
+        font-weight: bold;
+    }
+
+    .neumor.text {
+        background-color: #f0eeef;
+        border-radius: 50px 50px;
+        box-shadow: -5px -5px 6px -2px #ffffff inset, 5px 5px 4px -2px #a4a4a4 inset;
+        width: 70%;
+        height: 40px;
+        margin: 10px auto 0 auto;
+        font-size: 1.1em;
+        padding: 0px 15px;
+        border:0px;
+    }
+
+    .neumor.button {
+        border:0px;
+        background-color: #f0eeef;
+        width: 80px;
+        height: 30px;
+        border-radius: 10%;
+        box-shadow: -5px -5px 7px -2px #ffffff, 5px 5px 7px -2px #a4a4a4;
+        margin: 0px 0px -10px 15px;
+    }
+
+    /* .neumor.button:hover{
+        box-shadow: -5px -5px 7px -2px #ffffff, 5px 5px 7px -2px #a4a4a4;
+    } */
+    .neumor.button:active{
+        box-shadow: -3px -3px 5px -2px #ffffff inset, 3px 3px 5px -2px #a4a4a4 inset;
+    }
+
+    input:focus {outline:none;}
+
+    #searchDiv{
+        width: 65%;
+        margin-left: 22%;
+    }
+
+    #searchText {
+        background-color: transparent;
+        margin: 0 5% 0 5%;
+        width: 90%;
+    }
+
+</style>
+
+<body>
+    <div class='pageTitle'>
+        <p>Jira Statistics</p>
+    </div>
+
+    <div id='searchDiv'>
+        <input type="text" class="neumor text" >
+        <input type="button" class="neumor button" value="search">
+        <!-- <input type="text" class="neumor text" id="searchText"> -->
+    </div>
+
+
+</body>
+
+</html>
