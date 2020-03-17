@@ -11,7 +11,6 @@
     "license": "UNLICENSED",
     "build": {
         "asar": true,
-        "appId": "com.hwlee.electronSummary",
         "productName": "ElectronSummary",
         "publish": {
             "provider": "generic",
@@ -31,13 +30,7 @@
         "nsis": {
             "perMachine": true,
             "shortcutName": "단축아이콘이름"
-        },
-        "extraResources": [
-            {
-                "from": "./resources/test.dll",
-                "to": ""
-            }
-        ]
+        }
     },
     "devDependencies": {
         "asar": "^2.0.3",
@@ -45,7 +38,6 @@
         "electron-builder": "^21.2.0"
     },
     "dependencies": {
-        "electron-edge-js": "^12.8.1",
         "electron-log": "^4.0.6",
         "electron-prompt": "^1.5.1",
         "electron-updater": "^4.2.0"
