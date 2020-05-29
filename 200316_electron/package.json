@@ -1,0 +1,45 @@
+{
+    "name": "200316_electron",
+    "version": "0.0.1",
+    "description": "electron client summary",
+    "main": "index.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "private": true,
+    "author": "hwlee",
+    "license": "UNLICENSED",
+    "build": {
+        "asar": true,
+        "productName": "ElectronSummary",
+        "publish": {
+            "provider": "generic",
+            "url": "",
+            "channel": "latest"
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "ia32"
+                    ]
+                }
+            ]
+        },
+        "nsis": {
+            "perMachine": true,
+            "shortcutName": "단축아이콘이름"
+        }
+    },
+    "devDependencies": {
+        "asar": "^2.0.3",
+        "electron": "^7.1.9",
+        "electron-builder": "^21.2.0"
+    },
+    "dependencies": {
+        "electron-log": "^4.0.6",
+        "electron-prompt": "^1.5.1",
+        "electron-updater": "^4.2.0"
+    }
+}

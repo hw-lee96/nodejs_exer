@@ -2,7 +2,7 @@
     body {
         background-color : #f0eeef;
     }
-    @-webkit-keyframes clickani {
+    @keyframes clickani {
         from {
             box-shadow: -5px -5px 4px 1px #ffffff, 5px 5px 4px 3px #a4a4a4;
         }
@@ -12,12 +12,6 @@
         }
     }
 
-    /* 
-        box-shadow 속성
-        ex > box-shadow: -5px -5px 4px 2px #f5f3f4, 5px 5px 4px 2px #eeeae7;
-            : 좌우이동 상하이동 그림자 흐림 그림자 퍼짐
-            : 콤마(,)로 그림자를 2개 생성 가능(2개 초과로도 가능한 것 같음. 근데 겹치면 색이 겹친 색으로 나옴)
-     */
     #neumor1 {
         background-color: #f0eeef;
         width: 100px;
@@ -42,10 +36,10 @@
         box-shadow: -5px -5px 4px 1px #ffffff, 5px 5px 4px 3px #a4a4a4;
         margin: 10% auto;
 
-        -webkit-animation-duration: 1s;
-        -webkit-animation-name: clickani;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-direction: alternate;
+        animation-duration: 1s;
+        animation-name: clickani;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
     }
     #neumor4 {
         background-color : #f0eeef;
