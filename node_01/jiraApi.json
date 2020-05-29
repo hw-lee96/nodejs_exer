@@ -1,0 +1,7 @@
+{
+  "protocol" : "https",
+  "host" : "jira link",
+  "username" : "id",
+  "password" : "pw",
+  "strictSSL" : true
+}

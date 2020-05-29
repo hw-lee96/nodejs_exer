@@ -41,6 +41,16 @@
 </html>
 
 <script>
+    const JiraApi = require('jira-client');
+    var path = window.location.pathname;
+    if ( path.indexOf('/') > -1 ) {
+      path = path.replace(/\//g,'\\');
+    }
+    
+    if ( path.indexOf('resources') > -1 ) {
+      path = path.substring(path.lastIndexOf('resources'),path.indexOf('\\')+1);
+    }
+
     function replaceAll(str, searchStr, replaceStr) {
         return str.split(searchStr).join(replaceStr);
     }
@@ -98,7 +108,7 @@
         var date = new Date(new Date().setHours(new Date().getHours()+9)).toISOString().slice(0,19).replace(/T/g,' ').replace(/:/g,'.');
 
         const fs = require('fs');
-        fs.writeFileSync("C:/Users/hw.lee/Desktop/issueData_" + date + ".txt", '\ufeff' + text, {encoding: 'utf8'});
+        fs.writeFileSync( `${path}issueData_${date}.txt`, '\ufeff' + text, {encoding: 'utf8'});
 
         statDiv.innerHTML = '파일생성 완료!';
         progDiv.appendChild(statDiv);
@@ -108,9 +118,9 @@
     }
 
     function jiraIssueSelect() {
-        const config = require('./config/jiraApi.js');
+        const jiraConfig = require(`${path}jiraApi.json`);
         
-        var jira = config.getJiraApi;
+        var jira = new JiraApi(jiraConfig);
 
         var jql  = 'project = "[ServiceDesk] 해피앱" AND TYPE != 문제 AND duedate >= -8d AND duedate <= 9d AND assignee not in (sg.oh, ys.woo, jklee, jhbae) ORDER BY duedate DESC, type ASC';
 
@@ -118,7 +128,6 @@
     }
 
     function searchJira(jira, jql, obtional) {
-
 
         var issueArr = new Array();
 
